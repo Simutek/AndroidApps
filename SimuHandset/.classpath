@@ -3,7 +3,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/wheelLibraries"/>
 	<classpathentry exported="true" kind="lib" path="/wheel/bin/wheel.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/android-async-http-1.4.4-fix.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/avoscloud-v2.6.6.1.jar"/>
