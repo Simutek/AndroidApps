@@ -29,7 +29,6 @@ Thumbs.db
 *.dmg
 *.gz
 *.iso
-*.jar
 *.rar
 *.tar
 *.zip
@@ -41,5 +40,4 @@ Thumbs.db
 *.exe
 *.o
 *.o.d
-*.so
 *.class
