@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:weightSum="2">
+
+	<LinearLayout
+	    android:layout_width="118dp"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical" >
+
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="wrap_content">
+			<LinearLayout android:orientation="vertical"
+				android:layout_width="fill_parent" android:layout_height="fill_parent">     
+
+				<Button
+				    android:id="@+id/findCard"
+				    android:layout_width="fill_parent"
+				    android:layout_height="fill_parent"
+				    android:text="入库"
+				    android:textSize="48dp" 
+				    android:onClick="onFindCardClick"
+				    />	
+
+		        <Button
+		            android:id="@+id/verify"
+		            android:layout_width="fill_parent"
+		            android:layout_height="fill_parent"
+		            android:text="验证"
+		            android:textSize="48dp" 
+		            android:onClick="onVerifyClick"
+		            />
+		 
+				<Button android:id="@+id/clear" 
+				    android:text="清屏"
+					android:layout_width="fill_parent" 
+					android:layout_height="fill_parent"					
+					android:textSize="48dp" 
+					android:onClick="onClearClick"
+					/>    
+							
+			</LinearLayout>
+		</LinearLayout>
+	</LinearLayout>
+	<ScrollView android:layout_width="232dp"
+		android:layout_height="fill_parent">
+		<TextView android:id="@+id/resultView_MF1" android:hint="提示："
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:textSize="18dp" />
+	</ScrollView>
+</LinearLayout>
+

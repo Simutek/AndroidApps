@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright 2012 - 2013 Benjamin Weiss
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+  <string name="app_name">思木溯源</string>
+  <string name="button_putinstorage">入库</string>
+  <string name="hint_duration">Display duration in milliseconds.</string>
+  <string name="hint_text">或直接输入产品类别ID</string>
+  <string name="text_demo">This is a demo text, enter text below to display.</string>
+  <string name="warning_duration">You\'ll need to set the duration!</string>
+  <string name="display_on_top">Display on top</string>
+  <string name="crouton">入库</string>
+  <string name="exstorage">出库</string>
+  <string name="verify">验证</string>
+  <string name="upload">上传</string>
+  <string name="about">关于</string>
+  <string name="git_hub">Source on GitHub</string>
+  <string name="repo_url">https://github.com/keyboardsurfer/Crouton</string>
+  <string name="gplus_url">https://plus.google.com/117509657298845443204</string>
+  <string name="credits">思木溯源终端</string>
+  <string name="disclaimer">成都思木科技有限公司版权所有</string>
+  <string name="feedback"></string>
+  <string name="attributions"></string>
+  <string name="infinity_text"></string>
+
+  <string name="custom_title">Custom Crouton</string>
+  <string name="custom_message">Even with message!</string>
+  <string name="button_verify">验证标签</string>
+  <string name="button_exstorage">出库</string>
+  <string name="button_generateid">快捷生成类别ID</string>
+</resources>
