@@ -1,11 +1,12 @@
+#####################
 .metadata/
 actionbarsherlock/bin/
 library/bin/
 SimuHandset/bin/
-ViewpagerIndicator/bin/
 wheel/bin/
+cilico_RFID_v1/bin/
 
-######################  
+######################
 *.log
 *.sql
 *.sqlite
@@ -41,3 +42,6 @@ Thumbs.db
 *.o
 *.o.d
 *.class
+
+
+ViewPagerIndicator/bin/res/
