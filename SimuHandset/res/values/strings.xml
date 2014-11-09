@@ -29,6 +29,7 @@
   <string name="exstorage">出库</string>
   <string name="verify">验证</string>
   <string name="upload">上传</string>
+  <string name="download">下载</string>
   <string name="about">关于</string>
   <string name="git_hub">Source on GitHub</string>
   <string name="repo_url">https://github.com/keyboardsurfer/Crouton</string>

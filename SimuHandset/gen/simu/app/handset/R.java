@@ -1283,10 +1283,11 @@ containing a value of this type.
         public static final int alternate_view_group=0x7f040044;
         public static final int attributions=0x7f040018;
         public static final int bottom=0x7f040003;
+        public static final int button_download=0x7f04004c;
         public static final int button_exstorage=0x7f040045;
         public static final int button_show=0x7f040042;
         public static final int button_upload=0x7f04004b;
-        public static final int button_verify=0x7f04004c;
+        public static final int button_verify=0x7f04004d;
         public static final int credits=0x7f040015;
         public static final int crouton_layout=0x7f04003d;
         public static final int crouton_pager=0x7f040047;
@@ -1364,7 +1365,7 @@ containing a value of this type.
         public static final int wheel_text_item=0x7f030021;
     }
     public static final class string {
-        public static final int about=0x7f0a0018;
+        public static final int about=0x7f0a0019;
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abs__action_bar_home_description=0x7f0a0000;
@@ -1405,25 +1406,26 @@ containing a value of this type.
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0a0007;
         public static final int app_name=0x7f0a000d;
-        public static final int attributions=0x7f0a001f;
-        public static final int button_exstorage=0x7f0a0024;
-        public static final int button_generateid=0x7f0a0025;
+        public static final int attributions=0x7f0a0020;
+        public static final int button_exstorage=0x7f0a0025;
+        public static final int button_generateid=0x7f0a0026;
         public static final int button_putinstorage=0x7f0a000e;
-        public static final int button_verify=0x7f0a0023;
-        public static final int credits=0x7f0a001c;
+        public static final int button_verify=0x7f0a0024;
+        public static final int credits=0x7f0a001d;
         public static final int crouton=0x7f0a0014;
-        public static final int custom_message=0x7f0a0022;
-        public static final int custom_title=0x7f0a0021;
-        public static final int disclaimer=0x7f0a001d;
+        public static final int custom_message=0x7f0a0023;
+        public static final int custom_title=0x7f0a0022;
+        public static final int disclaimer=0x7f0a001e;
         public static final int display_on_top=0x7f0a0013;
+        public static final int download=0x7f0a0018;
         public static final int exstorage=0x7f0a0015;
-        public static final int feedback=0x7f0a001e;
-        public static final int git_hub=0x7f0a0019;
-        public static final int gplus_url=0x7f0a001b;
+        public static final int feedback=0x7f0a001f;
+        public static final int git_hub=0x7f0a001a;
+        public static final int gplus_url=0x7f0a001c;
         public static final int hint_duration=0x7f0a000f;
         public static final int hint_text=0x7f0a0010;
-        public static final int infinity_text=0x7f0a0020;
-        public static final int repo_url=0x7f0a001a;
+        public static final int infinity_text=0x7f0a0021;
+        public static final int repo_url=0x7f0a001b;
         public static final int text_demo=0x7f0a0011;
         public static final int upload=0x7f0a0017;
         public static final int verify=0x7f0a0016;

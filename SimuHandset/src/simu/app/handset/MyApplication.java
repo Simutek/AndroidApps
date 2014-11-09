@@ -11,6 +11,7 @@ import com.avos.avoscloud.LogUtil.log;
 
 import android.app.Application;
 import android.util.Log;
+import simu.avsubobjects.*;
 
 public class MyApplication extends Application {
 	
@@ -32,6 +33,11 @@ public class MyApplication extends Application {
 //		//my test
 //		AVOSCloud.initialize(this, "ytic05hcb4z3jr93yvhlbp42si2j15zb4ovw6bpt470xybc8", 
 //				"as8cca8okxowz2663xflikbof927qhif1222lpenbvi7q07h");
+		
+		AVObject.registerSubclass(RFID.class);
+		AVObject.registerSubclass(Vendor.class);
+		AVObject.registerSubclass(ProductCategory.class);
+		AVObject.registerSubclass(Product.class);
 		
 		
 		AVQuery<AVObject> QueryForVendor = new AVQuery<AVObject>("Vendor");

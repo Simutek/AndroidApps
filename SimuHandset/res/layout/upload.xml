@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+  	android:padding="@dimen/padding_default">
     
     <EditText
     android:id="@+id/edit_hint"
@@ -18,7 +19,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:onClick="submit"
-    android:text="@string/upload" />
+    android:text="@string/upload" 
+    android:enabled="false"
+    />
+    
+    <Button
+    android:id="@+id/button_download"
+    android:layout_marginBottom="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:onClick="submit"
+    android:text="@string/download" 
+    />
     
 
 </LinearLayout>
