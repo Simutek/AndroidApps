@@ -61,17 +61,11 @@ public class ExstorageFragment extends Fragment implements View.OnClickListener 
           .setDuration(Configuration.DURATION_INFINITE)
           .build();
 
-  private EditText croutonTextEdit, hintEdit;
+  private EditText hintEdit;
   private Crouton infiniteCrouton;
   private SQLiteDatabase db;
   
-  private Spinner sp1, sp2, sp3, sp4;
   private String id1, id2, id3;
-  
-  private List<Component> componentsLevel1;
-  private List<Component> componentsLevel2;
-  private List<Component> componentsLevel3;
-  private List<Component> componentsLevel4;
   
   enum OperType{PUTINSTORAGE, VERIFY, EXSTORAGE, NOTHING}
   private OperType curOperType = OperType.NOTHING; 
@@ -94,80 +88,11 @@ public class ExstorageFragment extends Fragment implements View.OnClickListener 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-//    view.findViewById(R.id.button_show).setOnClickListener(this);
-//    view.findViewById(R.id.button_verify).setOnClickListener(this);
     view.findViewById(R.id.button_exstorage).setOnClickListener(this);
-    croutonTextEdit = (EditText) view.findViewById(R.id.edit_text_text);
     hintEdit = (EditText) view.findViewById(R.id.edit_hint);
-    sp1 = (Spinner) view.findViewById(R.id.spinner1);
-    sp2 = (Spinner) view.findViewById(R.id.spinner2);
-    sp3 = (Spinner) view.findViewById(R.id.spinner3);
     
-		AssetsDatabaseManager mg = AssetsDatabaseManager.getManager(); 
-		db = mg.getDatabase("SimuLocal.db");
-		
-		ArrayList<Component> cp = FillComponents(0, -1);
-		ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
-		sp1.setAdapter(adp);
-		
-		sp1.setOnItemSelectedListener(new OnItemSelectedListener(){
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				Component c = (Component)parent.getItemAtPosition(position);
-				ArrayList<Component> cp = FillComponents(1, c.cNo);
-				ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
-				sp2.setAdapter(adp);
-				id1 = c.cID;
-				croutonTextEdit.setText(id1);
-			}
-			
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-				ArrayList<Component> cp = new ArrayList<Component>();
-				ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
-				sp2.setAdapter(adp);
-			}
-		});
-		
-		sp2.setOnItemSelectedListener(new OnItemSelectedListener(){
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				Component c = (Component)parent.getItemAtPosition(position);
-				ArrayList<Component> cp = FillComponents(2, c.cNo);
-				ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
-				sp3.setAdapter(adp);
-				id2 = c.cID;
-				croutonTextEdit.setText(id1 + id2);
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-				ArrayList<Component> cp = new ArrayList<Component>();
-				ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
-				sp3.setAdapter(adp);
-			}
-		});
-		
-		sp3.setOnItemSelectedListener(new OnItemSelectedListener(){
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				Component c = (Component)parent.getItemAtPosition(position);
-				id3 = c.cID;
-				croutonTextEdit.setText(id1 + id2 + id3);
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-			}
-		});
-		
-		croutonTextEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
+	AssetsDatabaseManager mg = AssetsDatabaseManager.getManager(); 
+	db = mg.getDatabase("SimuLocal.db");
   }
   
   final Handler handler = new Handler() {
@@ -176,14 +101,6 @@ public class ExstorageFragment extends Fragment implements View.OnClickListener 
   		if (cid.length() == 8) {
   			timer.cancel();
   			switch(curOperType) {
-  			case PUTINSTORAGE: {
-  				PutInStorage(cid);
-  				break;
-  			}
-  			case VERIFY: {
-  				Verify(cid);
-  				break;
-  			}
   			case EXSTORAGE: {
   				ExStorage(cid);
   				break;
@@ -248,68 +165,6 @@ public class ExstorageFragment extends Fragment implements View.OnClickListener 
 		intent.setClass(getActivity(), SpeedActivity.class);
 		startActivity(intent);
   }
-
-  private void PutInStorage(String cid) {
-		if (VerifyTag())
-		{
-			String typeID = getProductTypeID();
-			if (typeID.equals("init"))
-			{
-				db.execSQL("UPDATE smallTags SET productionDate=NULL, ProductType=NULL, ExStorageDate = NULL WHERE CID=?", new String[]{String.valueOf(cid)});
-				ShowCrouton(Style.INFO, "初始化成功，产品类别 : " + typeID); 				
-			}
-			else
-			{
-			
-				Cursor c = db.rawQuery("SELECT * FROM smallTags WHERE CID=?", new String[]{String.valueOf(cid)});
-				while(c.moveToNext())
-				{
-					String pDate = c.getString(c.getColumnIndex("ProductionDate"));
-					String eDate = c.getString(c.getColumnIndex("ExStorageDate"));
-					
-					if (!(eDate == null || eDate.equals("NULL") || eDate.equals("null")))
-					{
-						ShowCrouton(Style.ALERT, "产品已登记出库，无法重复入库");
-						return;
-					}
-					else 
-					{
-						if (!(pDate == null || pDate.equals("NULL") || pDate.equals("null")))
-						{
-							AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-							builder.setTitle("警告")
-							.setIcon(R.drawable.ic_launcher)
-							.setCancelable(false)
-							.setMessage("产品已登记入库，是否要再次登记并覆盖之前的记录？")
-							.setPositiveButton("确定", new DialogInterface.OnClickListener() {						
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-					  			String typeID = getProductTypeID();
-					  			if (!TextUtils.isEmpty(typeID))
-					  			{
-							  		db.execSQL("UPDATE smallTags SET productionDate=Date(), ProductType=? WHERE CID=?", new String[]{String.valueOf(typeID), String.valueOf(tempCID)});
-							  		ShowCrouton(Style.CONFIRM, "入库登记成功，产品类别 : " + typeID);
-					  			}
-								}
-							})
-							.setNegativeButton("取消", null);
-							AlertDialog dlg = builder.create();
-							tempCID = cid;
-							dlg.show();
-						}
-						else
-						{
-							if (!TextUtils.isEmpty(typeID))
-			  			{
-					  		db.execSQL("UPDATE smallTags SET productionDate=Date(), ProductType=? WHERE CID=?", new String[]{String.valueOf(typeID), String.valueOf(cid)});
-					  		ShowCrouton(Style.CONFIRM, "入库登记成功，产品类别 : " + typeID);	
-			  			}
-						}
-					}
-				}
-			}
-  	}
-	}
   
   private void ExStorage(String cid) {
 		if (VerifyTag())
@@ -352,23 +207,6 @@ public class ExstorageFragment extends Fragment implements View.OnClickListener 
 			}
 		}
 	}
-  
-  private ArrayList<Component> FillComponents(int level, int parent)
-  {
-  	ArrayList<Component> result = new ArrayList<Component>();
-  	Cursor c = db.rawQuery("SELECT * FROM component WHERE cLevel=? and cParentNo=?", new String[]{String.valueOf(level), String.valueOf(parent)});
-  	while(c.moveToNext())
-  	{
-  		Component p = new Component();
-  		p.cNo = c.getInt(c.getColumnIndex("cNo"));
-  		p.cID = c.getString(c.getColumnIndex("cID"));
-  		p.cName = c.getString(c.getColumnIndex("cName"));
-  		p.cLevel = c.getInt(c.getColumnIndex("cLevel"));
-  		p.cParentNo = c.getInt(c.getColumnIndex("cParentNo"));
-  		result.add(p);
-  	}
-  	return result;
-  }
   
   private void ShowCrouton(final Style croutonStyle, String croutonText) {
     showCrouton(croutonText, croutonStyle, Configuration.DEFAULT);
@@ -421,15 +259,6 @@ public class ExstorageFragment extends Fragment implements View.OnClickListener 
 		}
 		return t==0;
 	}
-  
-  private String getProductTypeID() {
-    String typeIDText = croutonTextEdit.getText().toString().trim();
-
-    if (TextUtils.isEmpty(typeIDText)) {
-      ShowCrouton(Style.ALERT, "请填写产品编码！");
-    }
-    return typeIDText;
-  }
 
   private void showCrouton(String croutonText, Style croutonStyle, Configuration configuration) {
     final boolean infinite = INFINITE == croutonStyle;

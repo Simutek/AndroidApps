@@ -1,7 +1,9 @@
 package simu.app.handset;
 
 import java.util.List;
+
 import simu.app.handset.R;
+import simu.avsubobjects.ProductCategory;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +12,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class ComponentAdapter extends BaseAdapter {
-  private List<Component> mList;
+  private List<ProductCategory> mList;
   private Context mContext;
 
-  public ComponentAdapter(Context pContext, List<Component> pList) {
+  public ComponentAdapter(Context pContext, List<ProductCategory> pList) {
       this.mContext = pContext;
       this.mList = pList;
   }
@@ -43,8 +45,8 @@ public class ComponentAdapter extends BaseAdapter {
       {
           TextView _TextView1=(TextView)convertView.findViewById(R.id.textView1);
           TextView _TextView2=(TextView)convertView.findViewById(R.id.textView2);
-          _TextView1.setText(mList.get(position).cID);
-          _TextView2.setText(mList.get(position).cName);
+          _TextView1.setText(mList.get(position).getTempSN());
+          _TextView2.setText(mList.get(position).getCategoryName());
       }
       return convertView;
   }

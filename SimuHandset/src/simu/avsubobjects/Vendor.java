@@ -14,10 +14,10 @@ public class Vendor extends AVObject {
 	}
 
 	public final String CN_VENDOR_CODE = "vendorCode";
-	public String getInitializeSN(){
+	public String getVendorCode(){
 		return getString(CN_VENDOR_CODE);
 	}
-	public void setInitializeSN(String value){
+	public void setVendorCode(String value){
 		put(CN_VENDOR_CODE, value);
 	}
 }

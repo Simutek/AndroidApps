@@ -16,48 +16,33 @@
 
 package simu.app.handset;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.CountCallback;
 import com.avos.avoscloud.FindCallback;
-import com.avos.avoscloud.SaveCallback;
 
-
+import simu.avsubobjects.*;
 import simu.app.handset.R;
 import simu.database.AssetsDatabaseManager;
-import cilico.tools.I2CTools;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
 import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -115,6 +100,10 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 			case R.id.button_upload: {
 				Log.d(tag, "点击了upload按钮");
 				UpLoad();
+				break;
+			}
+			case R.id.button_download: {
+				DownLoad();
 				break;
 			}
 			default: {
@@ -271,10 +260,117 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 //		db.close();
 //	}
 	}
-	private void GenerateTypeID() {
-		Intent intent = new Intent();
-		intent.setClass(getActivity(), SpeedActivity.class);
-		startActivity(intent);
+	
+	private void DownloadVendor(){
+		AVQuery<Vendor> query = AVObject.getQuery(Vendor.class);
+		query.findInBackground(new FindCallback<Vendor>(){
+			@Override
+			public void done(List<Vendor> results, AVException e){
+				if (e == null)
+				{
+					try
+					{
+						db.execSQL("DELETE FROM Vendor");
+						for (Vendor vendor : results){
+							ContentValues values = new ContentValues();
+							values.put("objectId", vendor.getObjectId());
+							values.put("vendorName", vendor.getVendorName());
+							values.put("vendorCode", vendor.getVendorCode());
+							db.insert("Vendor", null, values);
+						}
+					} catch(Exception se){
+						se.printStackTrace();
+					}
+				}
+				else
+					e.printStackTrace();
+			}
+		});
+	}
+	
+	private void DownloadCategory(){
+		AVQuery<ProductCategory> query = AVObject.getQuery(ProductCategory.class);
+		query.whereEqualTo(ProductCategory.CN_TAG_GENERATION, 2);
+		query.limit(1000);
+		query.findInBackground(new FindCallback<ProductCategory>(){
+			@Override
+			public void done(List<ProductCategory> results, AVException e){
+				if (e == null)
+				{
+					try
+					{
+						db.execSQL("DELETE FROM ProductCategory");
+						for (ProductCategory pc : results){
+							ContentValues values = new ContentValues();
+							values.put("objectId", pc.getObjectId());
+							values.put("categoryName", pc.getCategoryName());
+							values.put("level", pc.getLevel());
+							String parentObjectId = pc.getParent() == null ? "" : pc.getParent().getObjectId();
+							values.put("parent", parentObjectId);
+							values.put("tagGeneration", pc.getTagGeneration());
+							values.put("tempSN", pc.getTempSN());
+							db.insert("ProductCategory", null, values);
+						}
+					} catch(Exception se){
+						se.printStackTrace();
+					}
+				}
+				else
+					e.printStackTrace();
+			}
+		});
+	}
+	
+	private void DownloadRFID(){
+		while(true){
+			Cursor c = db.rawQuery("SELECT MAX(initializeSN) FROM RFID", null);
+			int initSn = 0;
+			if (c.getCount() > 0) {
+				c.moveToFirst();
+				initSn = c.getInt(0);
+			}
+			AVQuery<RFID> query = AVObject.getQuery(RFID.class);
+			query.whereEqualTo(RFID.CN_GENERATION, 2);
+			query.whereGreaterThan(RFID.CN_INITIALIZE_SN, initSn);
+			query.orderByAscending(RFID.CN_INITIALIZE_SN);
+			query.limit(500);
+			try {
+				List<RFID> results = query.find();
+				if (results.isEmpty())
+					return;
+				for (RFID rfid : results){
+					ContentValues values = new ContentValues();
+					values.put("objectId", rfid.getObjectId());
+					values.put("generation", rfid.getGeneration());
+					values.put("guid", rfid.getGuid());
+					values.put("initializeSN", rfid.getInitializeSN());
+					//values.put("initializeDate", rfid.getInitializeDate());
+					values.put("printingSN", rfid.getPrintingSN());
+					values.put("cid", rfid.getCid());
+					values.put("vendor", rfid.getVendor().getObjectId());
+					values.put("statu", rfid.getStatu());
+					db.insert("RFID", null, values);
+				}
+			} catch (AVException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	private void DownLoad() {
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				//DownloadVendor();
+				//DownloadCategory();
+				DownloadRFID();
+			}
+			}).start();
+		
+		//ShowCrouton(Style.CONFIRM, "下载完毕");
 	}
 
 	private void ShowCrouton(final Style croutonStyle, String croutonText) {

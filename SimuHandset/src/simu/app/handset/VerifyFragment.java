@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import simu.app.handset.R;
 import simu.database.AssetsDatabaseManager;
 import cilico.tools.I2CTools;
@@ -337,18 +338,26 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
   
   private void Verify(String cid) {
 		if (VerifyTag())
-		{			
-			Cursor c = db.rawQuery("SELECT * FROM smallTags WHERE CID=?", new String[]{String.valueOf(cid)});
-			while(c.moveToNext())
+		{		
+			Cursor c = db.rawQuery("SELECT * FROM RFID WHERE cid=?", new String[]{String.valueOf(cid)});
+			if (c.moveToNext())
 			{
-				String pDate = c.getString(c.getColumnIndex("ProductionDate"));
-				String eDate = c.getString(c.getColumnIndex("ExStorageDate"));
-				String pType = c.getString(c.getColumnIndex("ProductType"));
-				String pDateDes = (pDate == null || pDate.equals("NULL") || pDate.equals("null")) ? "尚未登记入库" : pDate;
-				String eDateDes = (eDate == null || eDate.equals("NULL") || eDate.equals("null")) ? "尚未登记出库" : eDate;
-				String pTypeDes = (pType == null || pType.equals("NULL") || pType.equals("null")) ? "尚未登记类别" : pType;
-				ShowCrouton(Style.INFO, String.format("电子标签验证成功：\n厂家：四川中兴机械\n生产日期：%s\n出厂日期：%s\n产品类别：%s", new String[]{String.valueOf(pDateDes), String.valueOf(eDateDes), String.valueOf(pTypeDes)}));
-				break;
+				String rfidObjectId = c.getString(c.getColumnIndex("objectId"));
+				Cursor c1 = db.rawQuery("SELECT * FROM Product WHERE rfid=?", new String[]{String.valueOf(rfidObjectId)});
+				if (c1.getCount() <= 0){
+					ShowCrouton(Style.INFO, "电子标签验证成功：\n厂家：四川中兴机械\n该标签尚未登记");
+				}else {
+					if (c1.moveToNext()){
+						String pDate = c1.getString(c1.getColumnIndex("productDate"));
+						String eDate = c1.getString(c1.getColumnIndex("factoryDate"));
+						String pType = c1.getString(c1.getColumnIndex("categoryName"));
+						String pDateDes = (pDate == null || pDate.equals("NULL") || pDate.equals("null")) ? "尚未登记入库" : pDate;
+						String eDateDes = (eDate == null || eDate.equals("NULL") || eDate.equals("null")) ? "尚未登记出库" : eDate;
+						String pTypeDes = (pType == null || pType.equals("NULL") || pType.equals("null")) ? "尚未登记类别" : pType;
+						ShowCrouton(Style.INFO, String.format("电子标签验证成功：\n厂家：四川中兴机械\n生产日期：%s\n出厂日期：%s\n产品类别：%s", 
+								new String[]{String.valueOf(pDateDes), String.valueOf(eDateDes), String.valueOf(pTypeDes)}));
+					}
+				}
 			}
 		}
 	}
@@ -371,7 +380,7 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
 //  }
   
   private void ShowCrouton(final Style croutonStyle, String croutonText) {
-    showCrouton(croutonText, croutonStyle, Configuration.DEFAULT);
+    //showCrouton(croutonText, croutonStyle, Configuration.DEFAULT);
     hintEdit.setText(croutonText);
     if (croutonStyle == Style.CONFIRM || croutonStyle == Style.INFO)
     	PlayNotification();
@@ -414,10 +423,12 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
 
 		t = I2CTools.ReadBlock(buffer, passw, (byte) 0x60,
 				(byte) add);
-		if (t != 0)
-		{
+		if (t != 0){
 			String croutonText = "警告：该标签不是思木科技认证的合法防伪标签，谨防伪造！";
 			ShowCrouton(Style.ALERT, croutonText);
+		}else{
+			String croutonText = "警告：该标签虽然加密信息吻合，但无法查找到认证数据，谨防伪造！";
+			ShowCrouton(Style.ALERT, croutonText);			
 		}
 		return t==0;
 	}

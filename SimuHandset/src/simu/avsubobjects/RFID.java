@@ -8,7 +8,7 @@ import com.avos.avoscloud.AVClassName;
 
 @AVClassName("RFID")
 public class RFID extends AVObject {
-	public final String CN_GENERATION = "generation";
+	public static final String CN_GENERATION = "generation";
 	public int getGeneration(){
 		return getInt(CN_GENERATION);
 	}
@@ -16,15 +16,15 @@ public class RFID extends AVObject {
 		put(CN_GENERATION, value);
 	}
 	
-	public final String CN_INITIALIZE_DATE = "initializeDate";
+	public static final String CN_INITIALIZE_DATE = "initializeDate";
 	public Date getInitializeDate(){
-		return getDate(CN_GENERATION);
+		return getDate(CN_INITIALIZE_DATE);
 	}
 	public void setInitializeDate(Date value){
-		put(CN_GENERATION, value);
+		put(CN_INITIALIZE_DATE, value);
 	}
 	
-	public final String CN_GUID = "guid";
+	public static final String CN_GUID = "guid";
 	public String getGuid(){
 		return getString(CN_GUID);
 	}
@@ -32,7 +32,7 @@ public class RFID extends AVObject {
 		put(CN_GUID, value);
 	}
 	
-	public final String CN_CID = "cid";
+	public static final String CN_CID = "cid";
 	public String getCid(){
 		return getString(CN_CID);
 	}
@@ -40,7 +40,7 @@ public class RFID extends AVObject {
 		put(CN_CID, value);
 	}
 
-	public final String CN_PRINTING_SN = "printingSN";
+	public static final String CN_PRINTING_SN = "printingSN";
 	public int getPrintingSN(){
 		return getInt(CN_PRINTING_SN);
 	}
@@ -48,7 +48,7 @@ public class RFID extends AVObject {
 		put(CN_PRINTING_SN, value);
 	}
 
-	public final String CN_INITIALIZE_SN = "initializeSN";
+	public static final String CN_INITIALIZE_SN = "initializeSN";
 	public int getInitializeSN(){
 		return getInt(CN_INITIALIZE_SN);
 	}
@@ -56,15 +56,15 @@ public class RFID extends AVObject {
 		put(CN_INITIALIZE_SN, value);
 	}
 
-	public final String CN_VENDOR = "vendor";
+	public static final String CN_VENDOR = "vendor";
 	public Vendor getVendor(){
-		return getAVObject(CN_INITIALIZE_SN);
+		return getAVObject(CN_VENDOR);
 	}
 	public void setVendor(Vendor value){
-		put(CN_INITIALIZE_SN, value);
+		put(CN_VENDOR, value);
 	}
 
-	public final String CN_STATU = "statu";
+	public static final String CN_STATU = "statu";
 	public int getStatu(){
 		return getInt(CN_STATU);
 	}

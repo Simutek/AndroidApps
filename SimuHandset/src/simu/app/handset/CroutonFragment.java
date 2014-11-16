@@ -17,16 +17,18 @@
 package simu.app.handset;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import simu.app.handset.R;
+import simu.avsubobjects.ProductCategory;
 import simu.database.AssetsDatabaseManager;
 import cilico.tools.I2CTools;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -36,13 +38,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import de.keyboardsurfer.android.widget.crouton.Configuration;
@@ -65,18 +65,13 @@ public class CroutonFragment extends Fragment implements View.OnClickListener {
   private Crouton infiniteCrouton;
   private SQLiteDatabase db;
   
-  private Spinner sp1, sp2, sp3, sp4;
-  private String id1, id2, id3;
-  
-  private List<Component> componentsLevel1;
-  private List<Component> componentsLevel2;
-  private List<Component> componentsLevel3;
-  private List<Component> componentsLevel4;
+  private Spinner sp1, sp2, sp3;
   
   enum OperType{PUTINSTORAGE, VERIFY, EXSTORAGE, NOTHING}
   private OperType curOperType = OperType.NOTHING; 
   
-  private String tempCID;
+  private String tempRFIDObjectId;
+  private ProductCategory curPC;
   
   Timer timer;
   int closeTimerTickCount = 0;
@@ -95,79 +90,78 @@ public class CroutonFragment extends Fragment implements View.OnClickListener {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     view.findViewById(R.id.button_show).setOnClickListener(this);
-//    view.findViewById(R.id.button_verify).setOnClickListener(this);
-//    view.findViewById(R.id.button_exstorage).setOnClickListener(this);
     croutonTextEdit = (EditText) view.findViewById(R.id.edit_text_text);
     hintEdit = (EditText) view.findViewById(R.id.edit_hint);
     sp1 = (Spinner) view.findViewById(R.id.spinner1);
     sp2 = (Spinner) view.findViewById(R.id.spinner2);
     sp3 = (Spinner) view.findViewById(R.id.spinner3);
     
-		AssetsDatabaseManager mg = AssetsDatabaseManager.getManager(); 
-		db = mg.getDatabase("SimuLocal.db");
+	AssetsDatabaseManager mg = AssetsDatabaseManager.getManager(); 
+	db = mg.getDatabase("SimuLocal.db");
+	
+	ArrayList<ProductCategory> cp = FillComponents(0, null);
+	ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
+	sp1.setAdapter(adp);
+	
+	sp1.setOnItemSelectedListener(new OnItemSelectedListener(){
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view,
+				int position, long id) {
+			ProductCategory c = (ProductCategory)parent.getItemAtPosition(position);
+			ArrayList<ProductCategory> cp = FillComponents(1, c);
+			ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
+			sp2.setAdapter(adp);
+			croutonTextEdit.setText(c.getTempSN());
+			curPC = c;
+		}
 		
-		ArrayList<Component> cp = FillComponents(0, -1);
-		ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
-		sp1.setAdapter(adp);
-		
-		sp1.setOnItemSelectedListener(new OnItemSelectedListener(){
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				Component c = (Component)parent.getItemAtPosition(position);
-				ArrayList<Component> cp = FillComponents(1, c.cNo);
-				ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
-				sp2.setAdapter(adp);
-				id1 = c.cID;
-				croutonTextEdit.setText(id1);
-			}
-			
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-				ArrayList<Component> cp = new ArrayList<Component>();
-				ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
-				sp2.setAdapter(adp);
-			}
-		});
-		
-		sp2.setOnItemSelectedListener(new OnItemSelectedListener(){
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				Component c = (Component)parent.getItemAtPosition(position);
-				ArrayList<Component> cp = FillComponents(2, c.cNo);
-				ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
-				sp3.setAdapter(adp);
-				id2 = c.cID;
-				croutonTextEdit.setText(id1 + id2);
-			}
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			// TODO Auto-generated method stub
+			ArrayList<ProductCategory> cp = new ArrayList<ProductCategory>();
+			ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
+			sp2.setAdapter(adp);
+			sp3.setAdapter(adp);
+		}
+	});
+	
+	sp2.setOnItemSelectedListener(new OnItemSelectedListener(){
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view,
+				int position, long id) {
+			ProductCategory c = (ProductCategory)parent.getItemAtPosition(position);
+			ArrayList<ProductCategory> cp = FillComponents(2, c);
+			ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
+			sp3.setAdapter(adp);
+			croutonTextEdit.setText(c.getTempSN());
+			curPC = c;
+		}
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-				ArrayList<Component> cp = new ArrayList<Component>();
-				ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
-				sp3.setAdapter(adp);
-			}
-		});
-		
-		sp3.setOnItemSelectedListener(new OnItemSelectedListener(){
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				Component c = (Component)parent.getItemAtPosition(position);
-				id3 = c.cID;
-				croutonTextEdit.setText(id1 + id2 + id3);
-			}
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			// TODO Auto-generated method stub
+			ArrayList<ProductCategory> cp = new ArrayList<ProductCategory>();
+			ComponentAdapter adp = new ComponentAdapter(getActivity(), cp);
+			sp3.setAdapter(adp);
+		}
+	});
+	
+	sp3.setOnItemSelectedListener(new OnItemSelectedListener(){
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view,
+				int position, long id) {
+			ProductCategory c = (ProductCategory)parent.getItemAtPosition(position);
+			croutonTextEdit.setText(c.getTempSN());
+			curPC = c;
+		}
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-			}
-		});
-		
-		croutonTextEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			// TODO Auto-generated method stub
+		}
+	});
+	
+	croutonTextEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
   }
   
   final Handler handler = new Handler() {
@@ -178,14 +172,6 @@ public class CroutonFragment extends Fragment implements View.OnClickListener {
   			switch(curOperType) {
   			case PUTINSTORAGE: {
   				PutInStorage(cid);
-  				break;
-  			}
-  			case VERIFY: {
-  				Verify(cid);
-  				break;
-  			}
-  			case EXSTORAGE: {
-  				ExStorage(cid);
   				break;
   			}
   			default: 
@@ -243,39 +229,47 @@ public class CroutonFragment extends Fragment implements View.OnClickListener {
     }
   }
   
-  private void GenerateTypeID() {
-		Intent intent = new Intent();
-		intent.setClass(getActivity(), SpeedActivity.class);
-		startActivity(intent);
-  }
+  private void AddNModifyProduct(String rfid, ProductCategory pc, Boolean isAdd){
+	  if(isAdd)
+	  {
+		  ContentValues values = new ContentValues();
+		  values.put("category", pc.getObjectId());
+		  values.put("rfid", rfid);
+		  values.put("vendor", String.valueOf("GhRj3SamEr"));
+		  values.put("categoryName", pc.getCategoryName());
+		  db.insert("Product", null, values);
+	  }
+	  try {
+		  
+		  db.execSQL("UPDATE Product SET productDate=Date(), category=?, categoryName=? WHERE rfid=?", 
+				  new String[]{String.valueOf(pc.getObjectId()),
+				  String.valueOf(pc.getCategoryName()),
+				  String.valueOf(rfid)});
+	  } catch(SQLException e){
+		  e.printStackTrace();
+		  return;
+	  }
+	    
+	  ShowCrouton(Style.INFO, "登记成功");
+  }  
 
   private void PutInStorage(String cid) {
-		if (VerifyTag())
-		{
-			String typeID = getProductTypeID();
-			if (typeID.equals("init"))
-			{
-				db.execSQL("UPDATE smallTags SET productionDate=NULL, ProductType=NULL, ExStorageDate = NULL WHERE CID=?", new String[]{String.valueOf(cid)});
-				ShowCrouton(Style.INFO, "初始化成功，产品类别 : " + typeID); 				
-			}
-			else
-			{
-			
-				Cursor c = db.rawQuery("SELECT * FROM smallTags WHERE CID=?", new String[]{String.valueOf(cid)});
-				while(c.moveToNext())
-				{
-					String pDate = c.getString(c.getColumnIndex("ProductionDate"));
-					String eDate = c.getString(c.getColumnIndex("ExStorageDate"));
-					
-					if (!(eDate == null || eDate.equals("NULL") || eDate.equals("null")))
-					{
-						ShowCrouton(Style.ALERT, "产品已登记出库，无法重复入库");
-						return;
-					}
-					else 
-					{
-						if (!(pDate == null || pDate.equals("NULL") || pDate.equals("null")))
-						{
+		if (VerifyTag()) {
+			Cursor c = db.rawQuery("SELECT * FROM RFID WHERE cid=?", new String[]{String.valueOf(cid)});
+			while(c.moveToNext()) {
+				String rfidObjectId = c.getString(c.getColumnIndex("objectId"));
+				Cursor c1 = db.rawQuery("SELECT * FROM Product WHERE rfid=?", new String[]{String.valueOf(rfidObjectId)});
+				if (c1.getCount() <= 0){
+					AddNModifyProduct(rfidObjectId, curPC, true);
+				} else {
+					if (c1.moveToFirst()){
+						String eDate = c1.getString(c1.getColumnIndex("factoryDate"));
+						
+						if (!(eDate == null || eDate.equals("NULL") || eDate.equals("null"))){
+							ShowCrouton(Style.ALERT, "产品已登记出库，无法重复入库");
+							return;
+						} else{
+							tempRFIDObjectId = rfidObjectId;
 							AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 							builder.setTitle("警告")
 							.setIcon(R.drawable.ic_launcher)
@@ -284,94 +278,40 @@ public class CroutonFragment extends Fragment implements View.OnClickListener {
 							.setPositiveButton("确定", new DialogInterface.OnClickListener() {						
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
-					  			String typeID = getProductTypeID();
-					  			if (!TextUtils.isEmpty(typeID))
-					  			{
-							  		db.execSQL("UPDATE smallTags SET productionDate=Date(), ProductType=? WHERE CID=?", new String[]{String.valueOf(typeID), String.valueOf(tempCID)});
-							  		ShowCrouton(Style.CONFIRM, "入库登记成功，产品类别 : " + typeID);
-					  			}
+									AddNModifyProduct(tempRFIDObjectId, curPC, false);
 								}
 							})
 							.setNegativeButton("取消", null);
 							AlertDialog dlg = builder.create();
-							tempCID = cid;
 							dlg.show();
-						}
-						else
-						{
-							if (!TextUtils.isEmpty(typeID))
-			  			{
-					  		db.execSQL("UPDATE smallTags SET productionDate=Date(), ProductType=? WHERE CID=?", new String[]{String.valueOf(typeID), String.valueOf(cid)});
-					  		ShowCrouton(Style.CONFIRM, "入库登记成功，产品类别 : " + typeID);	
-			  			}
 						}
 					}
 				}
-			}
-  	}
-	}
-  
-  private void ExStorage(String cid) {
-		if (VerifyTag())
-		{
-			Cursor c = db.rawQuery("SELECT * FROM smallTags WHERE CID=?", new String[]{String.valueOf(cid)});
-			while(c.moveToNext())
-			{
-				String pDate = c.getString(c.getColumnIndex("ProductionDate"));
-				String pType = c.getString(c.getColumnIndex("ProductType"));
-				String pTypeDes = (pType == null || pType.equals("NULL") || pType.equals("null")) ? "尚未登记类别" : pType;
-				
-				if (pDate == null || pDate.equals("NULL") || pDate.equals("null"))
-				{
-					ShowCrouton(Style.ALERT, "产品尚未登记入库，无法出库");
-					return;
-				}
-				else
-				{
-		  		db.execSQL("UPDATE smallTags SET ExStorageDate=Date() WHERE CID=?", new String[]{String.valueOf(cid)});
-		  		ShowCrouton(Style.CONFIRM, "出库登记成功，产品类别 : " + pTypeDes);
-				}
-			}
-  	}
-	}
-  
-  private void Verify(String cid) {
-		if (VerifyTag())
-		{			
-			Cursor c = db.rawQuery("SELECT * FROM smallTags WHERE CID=?", new String[]{String.valueOf(cid)});
-			while(c.moveToNext())
-			{
-				String pDate = c.getString(c.getColumnIndex("ProductionDate"));
-				String eDate = c.getString(c.getColumnIndex("ExStorageDate"));
-				String pType = c.getString(c.getColumnIndex("ProductType"));
-				String pDateDes = (pDate == null || pDate.equals("NULL") || pDate.equals("null")) ? "尚未登记入库" : pDate;
-				String eDateDes = (eDate == null || eDate.equals("NULL") || eDate.equals("null")) ? "尚未登记出库" : eDate;
-				String pTypeDes = (pType == null || pType.equals("NULL") || pType.equals("null")) ? "尚未登记类别" : pType;
-				ShowCrouton(Style.INFO, String.format("电子标签验证成功：\n厂家：四川中兴机械\n生产日期：%s\n出厂日期：%s\n产品类别：%s", new String[]{String.valueOf(pDateDes), String.valueOf(eDateDes), String.valueOf(pTypeDes)}));
-				break;
-			}
+			}			
 		}
 	}
   
-  private ArrayList<Component> FillComponents(int level, int parent)
+  private ArrayList<ProductCategory> FillComponents(int level, ProductCategory parent)
   {
-  	ArrayList<Component> result = new ArrayList<Component>();
-  	Cursor c = db.rawQuery("SELECT * FROM component WHERE cLevel=? and cParentNo=?", new String[]{String.valueOf(level), String.valueOf(parent)});
+  	ArrayList<ProductCategory> result = new ArrayList<ProductCategory>();
+  	String parentObjectId = parent == null ? "" : parent.getObjectId();
+  	Cursor c = db.rawQuery("SELECT * FROM ProductCategory WHERE level=? and parent=?", new String[]{String.valueOf(level), parentObjectId});
   	while(c.moveToNext())
   	{
-  		Component p = new Component();
-  		p.cNo = c.getInt(c.getColumnIndex("cNo"));
-  		p.cID = c.getString(c.getColumnIndex("cID"));
-  		p.cName = c.getString(c.getColumnIndex("cName"));
-  		p.cLevel = c.getInt(c.getColumnIndex("cLevel"));
-  		p.cParentNo = c.getInt(c.getColumnIndex("cParentNo"));
-  		result.add(p);
+  		ProductCategory pc = new ProductCategory();
+  		pc.setObjectId(c.getString(c.getColumnIndex("objectId")));
+  		pc.setCategoryName(c.getString(c.getColumnIndex("categoryName")));
+  		pc.setLevel(c.getInt(c.getColumnIndex("level")));
+  		pc.setParent(parent);
+  		pc.setTagGenetation(c.getInt(c.getColumnIndex("tagGeneration")));
+  		pc.setTempSN(c.getString(c.getColumnIndex("tempSN")));
+  		result.add(pc);
   	}
   	return result;
   }
   
   private void ShowCrouton(final Style croutonStyle, String croutonText) {
-    showCrouton(croutonText, croutonStyle, Configuration.DEFAULT);
+    //showCrouton(croutonText, croutonStyle, Configuration.DEFAULT);
     hintEdit.setText(croutonText);
     if (croutonStyle == Style.CONFIRM || croutonStyle == Style.INFO)
     	PlayNotification();
@@ -421,15 +361,6 @@ public class CroutonFragment extends Fragment implements View.OnClickListener {
 		}
 		return t==0;
 	}
-  
-  private String getProductTypeID() {
-    String typeIDText = croutonTextEdit.getText().toString().trim();
-
-    if (TextUtils.isEmpty(typeIDText)) {
-      ShowCrouton(Style.ALERT, "请填写产品编码！");
-    }
-    return typeIDText;
-  }
 
   private void showCrouton(String croutonText, Style croutonStyle, Configuration configuration) {
     final boolean infinite = INFINITE == croutonStyle;
