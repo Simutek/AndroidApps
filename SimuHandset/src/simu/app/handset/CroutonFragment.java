@@ -236,7 +236,7 @@ public class CroutonFragment extends Fragment implements View.OnClickListener {
 		  values.put("category", pc.getObjectId());
 		  values.put("rfid", rfid);
 		  values.put("vendor", String.valueOf("GhRj3SamEr"));
-		  values.put("categoryName", pc.getCategoryName());
+		  values.put("categoryName", pc.getFullName());//将categoryName改赋成Fullname
 		  db.insert("Product", null, values);
 	  }
 	  try {

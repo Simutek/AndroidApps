@@ -20,7 +20,7 @@
     android:layout_height="wrap_content"
     android:onClick="submit"
     android:text="@string/upload" 
-    android:enabled="false"
+    android:enabled="true"
     />
     
     <Button

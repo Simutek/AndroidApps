@@ -40,13 +40,13 @@ public class MyApplication extends Application {
 		AVObject.registerSubclass(Product.class);
 		
 		
-		AVQuery<AVObject> QueryForVendor = new AVQuery<AVObject>("Vendor");
-		try {
-			TempVendroObj = QueryForVendor.get("GhRj3SamEr");
-		} catch (AVException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		AVQuery<AVObject> QueryForVendor = new AVQuery<AVObject>("Vendor");
+//		try {
+//			TempVendroObj = QueryForVendor.get("GhRj3SamEr");
+//		} catch (AVException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 	
 	

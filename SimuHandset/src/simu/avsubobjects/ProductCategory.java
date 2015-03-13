@@ -6,6 +6,17 @@ import com.avos.avoscloud.AVClassName;
 @AVClassName("ProductCategory")
 public class ProductCategory extends AVObject {
 	public static final String CN_CATEGORY_NAME = "categoryName";
+	public static final String CN_CATEGORY_FULLNAME = "fullName";
+	
+	//增加FullName的get/set方法
+	public String getFullName(){
+		return getString(CN_CATEGORY_FULLNAME);
+	}
+
+	public void setFullName(String value){
+		put(CN_CATEGORY_FULLNAME,value);
+	}
+	
 	public String getCategoryName(){
 		return getString(CN_CATEGORY_NAME);
 	}
