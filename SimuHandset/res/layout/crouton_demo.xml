@@ -22,8 +22,10 @@
   android:layout_gravity="center"
   android:orientation="vertical"
   android:padding="@dimen/padding_default"
-  android:id="@+id/crouton_layout">
+  android:id="@+id/crouton_layout"
+  android:background="@color/NORMAL_BACKGROUND_COLOR">
   
+    
     
    <Spinner 
      android:id="@+id/spinner1"
@@ -31,7 +33,12 @@
      android:layout_width="match_parent"
      android:layout_marginLeft="6dip"
      android:layout_marginRight="6dip"
+     android:layout_marginTop="5dp"
+     android:paddingTop="0.5dp"
+     android:paddingBottom="0.5dp"
      />
+   
+   
    
    <Spinner 
      android:id="@+id/spinner2"
@@ -39,29 +46,43 @@
      android:layout_width="match_parent"
      android:layout_marginLeft="6dip"
      android:layout_marginRight="6dip"
+     android:layout_marginTop="5dp"
      />
 
+  
+   
    <Spinner 
      android:id="@+id/spinner3"
      android:layout_height="50dip"
      android:layout_width="match_parent"
      android:layout_marginLeft="6dip"
      android:layout_marginRight="6dip"
+     android:layout_marginTop="5dp"
      />
 
+  
     
   <EditText
     android:id="@+id/edit_text_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/hint_text"
-    android:singleLine="true" />
+    android:singleLine="true"
+    android:layout_marginTop="5dp"
+     />
 
+  
+  
   <Button
     android:id="@+id/button_show"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="@string/button_putinstorage" />
+    android:text="@string/button_putinstorage"
+    android:background="@drawable/buttom_style"
+    android:textColor="#FFFFFF"
+    android:layout_marginTop="5dp"
+     />
+  
 
 <!--   <Button
     android:id="@+id/button_verify"
@@ -81,6 +102,7 @@
     android:layout_height="wrap_content"
     android:enabled="false"
     android:height="150dip"
+    android:layout_marginTop="5dp"
     />
 
   <LinearLayout
@@ -88,5 +110,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     android:orientation="horizontal"
+    android:layout_marginTop="5dp"
     />
 </LinearLayout>
