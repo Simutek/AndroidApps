@@ -1235,15 +1235,17 @@ containing a value of this type.
         public static final int abs__toast_frame=0x7f02006f;
         public static final int buttom_style=0x7f020070;
         public static final int ic_launcher=0x7f020071;
-        public static final int laucher=0x7f020072;
-        public static final int layout_bg=0x7f020073;
-        public static final int vpi__tab_indicator=0x7f020074;
-        public static final int vpi__tab_selected_focused_holo=0x7f020075;
-        public static final int vpi__tab_selected_holo=0x7f020076;
-        public static final int vpi__tab_selected_pressed_holo=0x7f020077;
-        public static final int vpi__tab_unselected_focused_holo=0x7f020078;
-        public static final int vpi__tab_unselected_holo=0x7f020079;
-        public static final int vpi__tab_unselected_pressed_holo=0x7f02007a;
+        public static final int icon_account=0x7f020072;
+        public static final int icon_pwd=0x7f020073;
+        public static final int laucher=0x7f020074;
+        public static final int layout_bg=0x7f020075;
+        public static final int vpi__tab_indicator=0x7f020076;
+        public static final int vpi__tab_selected_focused_holo=0x7f020077;
+        public static final int vpi__tab_selected_holo=0x7f020078;
+        public static final int vpi__tab_selected_pressed_holo=0x7f020079;
+        public static final int vpi__tab_unselected_focused_holo=0x7f02007a;
+        public static final int vpi__tab_unselected_holo=0x7f02007b;
+        public static final int vpi__tab_unselected_pressed_holo=0x7f02007c;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f090029;
@@ -1288,14 +1290,14 @@ containing a value of this type.
         public static final int alternate_view_group=0x7f090044;
         public static final int attributions=0x7f090018;
         public static final int bottom=0x7f090009;
-        public static final int button_download=0x7f09004c;
+        public static final int button_download=0x7f090052;
         public static final int button_exstorage=0x7f090045;
         public static final int button_show=0x7f090042;
-        public static final int button_upload=0x7f09004b;
-        public static final int button_verify=0x7f09004d;
+        public static final int button_upload=0x7f090051;
+        public static final int button_verify=0x7f090053;
         public static final int credits=0x7f090015;
         public static final int crouton_layout=0x7f09003d;
-        public static final int crouton_pager=0x7f090047;
+        public static final int crouton_pager=0x7f09004d;
         public static final int disableHome=0x7f09000f;
         public static final int disclaimer=0x7f090016;
         public static final int edit_hint=0x7f090043;
@@ -1303,26 +1305,32 @@ containing a value of this type.
         public static final int edit_text_text=0x7f090041;
         public static final int feedback=0x7f090017;
         public static final int homeAsUp=0x7f090010;
+        public static final int iv_password=0x7f090049;
+        public static final int iv_username=0x7f090047;
         public static final int listMode=0x7f09000c;
+        public static final int loginbtn=0x7f09004b;
         public static final int none=0x7f090006;
         public static final int normal=0x7f09000d;
+        public static final int password=0x7f09004a;
         public static final int showCustom=0x7f090011;
         public static final int showHome=0x7f090012;
         public static final int showTitle=0x7f090013;
-        public static final int speed=0x7f090048;
+        public static final int speed=0x7f09004e;
         public static final int spinner1=0x7f09003e;
         public static final int spinner2=0x7f09003f;
         public static final int spinner3=0x7f090040;
         public static final int tabMode=0x7f09000e;
-        public static final int text=0x7f09004a;
+        public static final int text=0x7f090050;
         public static final int textView1=0x7f09003b;
         public static final int textView2=0x7f09003c;
-        public static final int titles=0x7f090046;
+        public static final int title=0x7f090046;
+        public static final int titles=0x7f09004c;
         public static final int top=0x7f09000a;
         public static final int triangle=0x7f090007;
         public static final int underline=0x7f090008;
-        public static final int units=0x7f090049;
+        public static final int units=0x7f09004f;
         public static final int useLogo=0x7f090014;
+        public static final int username=0x7f090048;
         public static final int wrap_content=0x7f09000b;
     }
     public static final class integer {
@@ -1360,14 +1368,15 @@ containing a value of this type.
         public static final int crouton_custom_view=0x7f030017;
         public static final int crouton_demo=0x7f030018;
         public static final int extorage=0x7f030019;
-        public static final int main=0x7f03001a;
-        public static final int sherlock_spinner_dropdown_item=0x7f03001b;
-        public static final int sherlock_spinner_item=0x7f03001c;
-        public static final int speed1_layout=0x7f03001d;
-        public static final int units_item=0x7f03001e;
-        public static final int upload=0x7f03001f;
-        public static final int verify=0x7f030020;
-        public static final int wheel_text_item=0x7f030021;
+        public static final int login=0x7f03001a;
+        public static final int main=0x7f03001b;
+        public static final int sherlock_spinner_dropdown_item=0x7f03001c;
+        public static final int sherlock_spinner_item=0x7f03001d;
+        public static final int speed1_layout=0x7f03001e;
+        public static final int units_item=0x7f03001f;
+        public static final int upload=0x7f030020;
+        public static final int verify=0x7f030021;
+        public static final int wheel_text_item=0x7f030022;
     }
     public static final class string {
         public static final int about=0x7f0a0019;
