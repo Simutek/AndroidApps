@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/NORMAL_BACKGROUND_COLOR"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="一级类别" />
+
+    <TextView
+        android:id="@+id/et_first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="暂未选择"
+         />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="二级类别" />
+
+    <TextView
+        android:id="@+id/et_second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="暂未选择"
+         />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="三级类别" />
+
+    <TextView
+        android:id="@+id/et_third"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="暂未选择"
+        />
+    
+    <EditText
+    android:id="@+id/et_confirm"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:enabled="false"
+    android:height="150dip"
+    android:layout_marginTop="5dp"
+    />
+    
+</LinearLayout>

@@ -25,6 +25,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.WindowManager;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.viewpagerindicator.TabPageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
@@ -54,7 +55,8 @@ public class CroutonDemo extends SherlockFragmentActivity {
     setContentView(R.layout.main);
     croutonPager = (ViewPager) findViewById(R.id.crouton_pager);
     croutonPager.setAdapter(new CroutonPagerAdapter(getSupportFragmentManager()));
-    ((TitlePageIndicator) findViewById(R.id.titles)).setViewPager(croutonPager);
+//    ((TitlePageIndicator) findViewById(R.id.titles)).setViewPager(croutonPager);
+    ((TabPageIndicator)findViewById(R.id.titles)).setViewPager(croutonPager);
     
     AssetsDatabaseManager.initManager(getApplication());
     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);

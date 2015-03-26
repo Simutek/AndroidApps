@@ -39,7 +39,8 @@
         <activity
             android:name="simu.app.handset.Login"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Sherlock.Light" >
+            android:theme="@style/Sherlock.__Theme.Light"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,6 +48,7 @@
             </intent-filter>
         </activity>
         <activity android:name="simu.app.handset.SpeedActivity"></activity>
+        <activity android:name="simu.app.handset.CroutonFragmentConfrim"></activity>
         <activity android:name="simu.app.handset.CroutonDemo"
             android:label="@string/app_name"
             android:theme="@style/Theme.Sherlock.Light"></activity>

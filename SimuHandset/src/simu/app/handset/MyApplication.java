@@ -15,38 +15,28 @@ import simu.avsubobjects.*;
 
 public class MyApplication extends Application {
 	
-	public AVObject TempVendroObj = null;
-	public AVObject TempRfidObj = null;
-	
-
-	private String Tag;
-	protected String tag;
+	public ProductCategory curProductCategory = null;
 
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
 		super.onCreate();
-		log.d(Tag, "---------");
 		
 		AVOSCloud.initialize(this, "ztxdtfdpjrzbsu3serlcvbdvyk0pfscj0uq4abwpnzzq0xjt", 
 				"3b42n9qeca6zh58r1fcd91rbblfgz24ro4boz502rl7ldms2");
-//		//my test
-//		AVOSCloud.initialize(this, "ytic05hcb4z3jr93yvhlbp42si2j15zb4ovw6bpt470xybc8", 
-//				"as8cca8okxowz2663xflikbof927qhif1222lpenbvi7q07h");
 		
 		AVObject.registerSubclass(RFID.class);
 		AVObject.registerSubclass(Vendor.class);
 		AVObject.registerSubclass(ProductCategory.class);
 		AVObject.registerSubclass(Product.class);
-		
-		
-//		AVQuery<AVObject> QueryForVendor = new AVQuery<AVObject>("Vendor");
-//		try {
-//			TempVendroObj = QueryForVendor.get("GhRj3SamEr");
-//		} catch (AVException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+	}
+
+	public ProductCategory getCurProductCategory() {
+		return curProductCategory;
+	}
+
+	public void setCurProductCategory(ProductCategory curProductCategory) {
+		Log.d("MyApplication", "curPC has been setted !!");
+		this.curProductCategory = curProductCategory;
 	}
 	
 	

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_ready"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请将手持机背面贴近部件上安装的RFID标签。" />
+    
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ProgressBar
+            android:id="@+id/loading_process_dialog_progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:indeterminateDrawable="@anim/loading"
+            android:padding="10dp"
+            android:layout_marginLeft="5dp"
+             />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/loading_process_dialog_progressBar"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            android:padding="10dp"
+            android:text="取消操作" />
+        
+    </RelativeLayout>
+    
+</LinearLayout>

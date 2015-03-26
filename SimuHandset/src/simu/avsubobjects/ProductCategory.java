@@ -1,5 +1,7 @@
 package simu.avsubobjects;
 
+import java.io.Serializable;
+
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVClassName;
 

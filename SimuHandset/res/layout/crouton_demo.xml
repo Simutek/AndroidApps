@@ -27,7 +27,7 @@
   
     
     
-   <Spinner 
+  <!--  <Spinner 
      android:id="@+id/spinner1"
      android:layout_height="50dip"
      android:layout_width="match_parent"
@@ -36,30 +36,96 @@
      android:layout_marginTop="5dp"
      android:paddingTop="0.5dp"
      android:paddingBottom="0.5dp"
-     />
+     /> -->
    
    
    
-   <Spinner 
+ <!--   <Spinner 
      android:id="@+id/spinner2"
      android:layout_height="50dip"
      android:layout_width="match_parent"
      android:layout_marginLeft="6dip"
      android:layout_marginRight="6dip"
      android:layout_marginTop="5dp"
-     />
+     /> -->
 
   
    
-   <Spinner 
+<!--    <Spinner 
      android:id="@+id/spinner3"
      android:layout_height="50dip"
      android:layout_width="match_parent"
      android:layout_marginLeft="6dip"
      android:layout_marginRight="6dip"
      android:layout_marginTop="5dp"
-     />
-
+     /> -->
+     
+  <TextView 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="20sp"
+      android:text="第一级别:"
+      android:padding="5dp"
+      />
+  
+  <EditText 
+      android:id="@+id/firstLevel"
+      android:layout_width="150dp"
+      android:layout_height="wrap_content"
+      android:textSize="20sp"
+      android:padding="5dp"
+      android:inputType="none"
+      android:editable="false"
+      android:background="@android:color/white"
+      android:paddingLeft="5dp"
+      />
+  
+  <TextView 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="20sp"
+      android:text="第二级别:"
+      android:padding="5dp"
+      />
+  
+  <EditText 
+      android:id="@+id/secondLevel"
+      android:layout_width="150dp"
+      android:layout_height="wrap_content"
+      android:textSize="20sp"
+      android:padding="5dp"
+      android:inputType="none"
+      android:editable="false"
+      android:background="@android:color/white"
+      android:paddingLeft="5dp"
+      />
+  
+  <TextView 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="20sp"
+      android:text="第三级别:"
+      android:padding="5dp"
+      />
+  
+  <EditText 
+      android:id="@+id/thirdLevel"
+      android:layout_width="150dp"
+      android:layout_height="wrap_content"
+      android:textSize="20sp"
+      android:padding="5dp"
+      android:inputType="none"
+      android:editable="false"
+      android:background="@android:color/white"
+      android:paddingLeft="5dp"
+      />
+<TextView 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="15sp"
+      android:text="选中类别:"
+      android:padding="5dp"
+      />
   
     
   <EditText
