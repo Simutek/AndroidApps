@@ -21,6 +21,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
+<!--     <include layout="@layout/general_layout_title"/>
+ -->    
     <android.support.v4.view.ViewPager
         android:id="@+id/crouton_pager"
         android:layout_width="match_parent"

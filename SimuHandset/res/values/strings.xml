@@ -27,6 +27,8 @@
   <string name="display_on_top">Display on top</string>
   <string name="crouton">入库</string>
   <string name="exstorage">出库</string>
+  <string name="search">查询</string>
+  <string name="setting">设置</string>
   <string name="verify">验证</string>
   <string name="upload">上传</string>
   <string name="download">下载</string>

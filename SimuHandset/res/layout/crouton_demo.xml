@@ -162,14 +162,14 @@
     android:layout_height="wrap_content"
     android:text="@string/button_exstorage" />  -->
 
-  <EditText
+  <!-- <EditText
     android:id="@+id/edit_hint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:enabled="false"
     android:height="150dip"
     android:layout_marginTop="5dp"
-    />
+    /> -->
 
   <LinearLayout
     android:id="@+id/alternate_view_group"

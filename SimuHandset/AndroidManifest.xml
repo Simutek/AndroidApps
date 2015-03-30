@@ -12,8 +12,8 @@
   ~ distributed under the License is distributed on an "AS IS" BASIS,
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
+  ~ limitations under the License.
+-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="simu.app.handset"
@@ -23,39 +23,46 @@
     <uses-sdk
         android:minSdkVersion="4"
         android:targetSdkVersion="17" />
-    
-    
-    
+
     <uses-feature
         android:name="android.hardware.touchscreen"
-        android:required="false"/>
-    
+        android:required="false" />
 
     <application
         android:name="MyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/laucher"
-        android:label="@string/app_name" >
+ 		android:icon="@drawable/laucher"
+        android:label="@string/app_name"
+         >
+        
         <activity
             android:name="simu.app.handset.Login"
-            android:label="@string/app_name"
-            android:theme="@style/Sherlock.__Theme.Light"
-            >
+			android:label="@string/app_name"
+	        android:theme="@style/Sherlock.__Theme.Light"
+             >
+<!--         	android:theme="@style/android:Theme.Light" -->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="simu.app.handset.SpeedActivity"></activity>
-        <activity android:name="simu.app.handset.CroutonFragmentConfrim"></activity>
-        <activity android:name="simu.app.handset.CroutonDemo"
+        
+        <activity android:name="simu.app.handset.SpeedActivity" >
+        </activity>
+        <activity android:name="simu.app.handset.CroutonFragmentConfrim" >
+        </activity>
+        <activity android:name="simu.app.handset.VerifyRFID"></activity>
+        <activity
+            android:name="simu.app.handset.CroutonDemo"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Sherlock.Light"></activity>
+			android:theme="@style/Theme.Sherlock.Light" >
+            ></activity>
     </application>
-    
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />

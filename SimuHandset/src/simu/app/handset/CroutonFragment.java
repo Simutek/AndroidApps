@@ -55,6 +55,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -107,16 +108,12 @@ public class CroutonFragment extends Fragment implements View.OnClickListener {
 	private OperType curOperType = OperType.NOTHING;
 
 	private String tempRFIDObjectId;
-	private ProductCategory curPC;
+	private ProductCategory curPC = null;
 
 	Timer timer;
 	int closeTimerTickCount = 0;
 
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -285,15 +282,20 @@ public class CroutonFragment extends Fragment implements View.OnClickListener {
 		}
 		switch (view.getId()) {
 		case R.id.button_show: {
+			if (null != curPC) {
+				MyApplication app = (MyApplication)getActivity().getApplication();
+				Log.d("CroutonFragment.this", "CroutonFragment.curPC = " + curPC.getTempSN());
+				app.setCurProductCategory(curPC);
+				Log.d(null, "MyApplication.curProductCategory.SN = " + app.getCurProductCategory().getTempSN());
+			}else {
+				Toast.makeText(getActivity(), "还没选择任何条目", Toast.LENGTH_SHORT).show();
+				break;
+			}
 			Intent it = new Intent();
 			it.putExtra("first", first);
 			it.putExtra("second", second);
 			it.putExtra("third", third);
 			it.setClass(getActivity().getApplicationContext(), CroutonFragmentConfrim.class);
-			MyApplication app = (MyApplication)getActivity().getApplication();
-			Log.d("CroutonFragment.this", "CroutonFragment.curPC = " + curPC.getTempSN());
-			app.setCurProductCategory(curPC);
-			Log.d(null, "MyApplication.curProductCategory.SN = " + app.getCurProductCategory().getTempSN());
 			startActivity(it);
 			getActivity().finish();
 			curOperType = OperType.PUTINSTORAGE;
@@ -528,13 +530,13 @@ public class CroutonFragment extends Fragment implements View.OnClickListener {
 		getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
 		int width = dm.widthPixels;//宽度
 		int height = dm.heightPixels ;//高度
+		int height1 = getActivity().getWindow().findViewById(Window.ID_ANDROID_CONTENT).getHeight();
 		Log.d(null, "listview : width = " + lv_group.getWidth() + " height = " + lv_group.getHeight());
-		Log.d(null, "屏幕大小 : width = " + width + " height = " + height);
+		Log.d(null, "屏幕大小 : width = " + width + " height = " + height + "view 区域  height = " + height1);
 		Log.d(null, "croutonlayout.width = " + crouton.getWidth() + " height = " + crouton.getHeight());
 		Log.d(null, "powindow.width : " + popupWindow.getWidth() + " powindow.height : " + popupWindow.getHeight());
-		
 		popupWindow.showAsDropDown(
-				 crouton, width - popupWindow.getWidth(), 83);
+				 crouton, width - popupWindow.getWidth(), height - height1);
 		
 		lv_group.setOnItemClickListener(new OnItemClickListener() {
 			@Override
