@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.actionbarsherlock.internal.view.View_HasStateListenerSupport;
+
 import simu.avsubobjects.ProductCategory;
 import simu.database.AssetsDatabaseManager;
 
@@ -12,10 +14,13 @@ import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -37,134 +42,115 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class CroutonFragmentConfrim extends FragmentActivity implements View.OnClickListener{
-	
-	private TextView first,second,third;
-	private EditText ETconfirm;
-	private Button btn_cancel;
-	private String tag = "CroutonFragmentConfirm";
+public class CroutonFragmentConfrim extends Activity {
+
 	Timer timer;
-	int closeTimerTickCount = 0;
 	private SQLiteDatabase db;
+	int closeTimerTickCount = 0;
 	private ProductCategory curPC = null;
 	private String tempRFIDObjectId;
-	private Crouton infiniteCrouton;
-	
-	
-	private static final Style INFINITE = new Style.Builder()
-	.setBackgroundColorValue(Style.holoBlueLight).build();
-	private static final Configuration CONFIGURATION_INFINITE = new Configuration.Builder()
-	.setDuration(Configuration.DURATION_INFINITE).build();
+	EditText hintEdit;
+	private AlertDialog dialog = null;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.crouton_confirm);
+		AssetsDatabaseManager mg = AssetsDatabaseManager.getManager();
+		db = mg.getDatabase("SimuLocal.db");
+		Log.d(null, "this.onCreate()");
+
+		TextView et1 = (TextView) findViewById(R.id.et_first);
+		et1.setText(getIntent().getStringExtra("first"));
+		TextView et2 = (TextView) findViewById(R.id.et_second);
+		et2.setText(getIntent().getStringExtra("second"));
+		TextView et3 = (TextView) findViewById(R.id.et_third);
+		et3.setText(getIntent().getStringExtra("third"));
+		hintEdit = (EditText) findViewById(R.id.et_confirm);
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.d(null, "this.onResume()");
+		showReadyDialog();
+		beginToCrouton();
+	}
 
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		Log.d(null, "CroutonFragmentConfirm.this.onBackPressed()");
-		Intent it = new Intent();
-		it.setClass(CroutonFragmentConfrim.this, CroutonDemo.class);
+		Intent it = new Intent(CroutonFragmentConfrim.this, CroutonDemo.class);
 		finish();
 		startActivity(it);
-		
 	}
-
-	@Override
-	protected void onCreate(Bundle arg0) {
-		super.onCreate(arg0);
-		Log.d(tag, "this.onCreate()");
-		setContentView(R.layout.crouton_confirm);
-		first = (TextView) findViewById(R.id.et_first);
-		second = (TextView) findViewById(R.id.et_second);
-		third =   (TextView) findViewById(R.id.et_third);
-		ETconfirm = (EditText) findViewById(R.id.et_confirm);
-		
-		
-		Intent it = getIntent();
-		first.setText(it.getStringExtra("first"));
-		second.setText(it.getStringExtra("second"));
-		third.setText(it.getStringExtra("third"));
-		
-		AssetsDatabaseManager mg = AssetsDatabaseManager.getManager();
-		db = mg.getDatabase("SimuLocal.db");
-		
-		//show the readyDialog
-		readyToRead();
-		
-		//the readyDialog was shown
-		inCome();
-	}
-
-
-	Handler handler = new Handler(){
-		
-		@Override
-		public void handleMessage(Message msg) {
-
-			Log.d(tag, "this.readyToRead()");
-			String cid = ReadCID(true);
-			if (8 == cid.length()) {
-				timer.cancel();
-				PutInStorage(cid);
-			}else if (10 < closeTimerTickCount) {
-				timer.cancel();
-			}
-			
-		}
-		
-	};
 	
+	private void showReadyDialog() {
+		LayoutInflater li = LayoutInflater.from(CroutonFragmentConfrim.this);
+		View dialogView = li.inflate(R.layout.dialog_ready, null);
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				CroutonFragmentConfrim.this);
+		builder.setTitle("准备写入RFID认证").setView(dialogView)
+				.setNegativeButton("取消操作", new OnClickListener() {
 
-	private void readyToRead() {
-		Log.d(tag, "this.readyToRead()");
-		LayoutInflater li = getLayoutInflater();
-		View readyDialog = li.inflate(R.layout.dialog_ready, (ViewGroup) findViewById(R.id.dialog_ready));
-//		AlertDialog.Builder builder =  new AlertDialog.Builder(this);
-//		builder.setTitle("准备写入RFID认证").setView(readyDialog).show();
-//		
-		Dialog dialog = new Dialog(CroutonFragmentConfrim.this);
-		dialog.setTitle("准备写入RFID认证");
-		dialog.setContentView(readyDialog);
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Intent it = new Intent(CroutonFragmentConfrim.this,
+								CroutonDemo.class);
+						finish();
+						startActivity(it);
+					}
+				});
+		dialog = builder.create();
 		dialog.show();
-		btn_cancel = (Button)dialog.getWindow().findViewById(R.id.btn_cancel);
-		btn_cancel.setOnClickListener(this);
-		
-		
-	
-		
 	}
 
-	@Override
-	public void onClick(View v) {
-		Log.d(tag, ".onClick()");
-		if (R.id.btn_cancel == v.getId()) {
-			Intent it = new Intent();
-			it.setClass(CroutonFragmentConfrim.this, CroutonDemo.class);
-			finish();
-			startActivity(it);
-		}
-		
-	}
-	
-	private void inCome() {
-		Log.d(tag, "this.inCome()");
+	private void beginToCrouton() {
+		Log.d(null, "this.beginToCrouton()");
 		TimerTask task = new TimerTask() {
+
 			@Override
 			public void run() {
-				if (null != timer) {
-					timer.cancel();
-					timer.purge();
-				}
 				Message message = new Message();
 				handler.sendMessage(message);
+				Log.d(null, "has sent the message !!");
 			}
 		};
+		if (null != timer) {
+			timer.cancel();
+			timer.purge();
+		}
 		timer = new Timer(true);
-		timer.schedule(task, 1000, 1500);
+		timer.schedule(task, 1500, 2000);
 	}
-	
+
+	Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			Log.d(null, "has received the message !!");
+			String cid = ReadCID(true);
+			if (cid.length() == 8) {
+				timer.cancel();
+				PutInStorage(cid);
+			} else {
+				if (closeTimerTickCount++ > 10) {
+					timer.cancel();
+					Toast.makeText(CroutonFragmentConfrim.this,
+							"操作超时，请重新验证 !!!", Toast.LENGTH_SHORT).show();
+					PlayNotification();
+					Intent it = new Intent(CroutonFragmentConfrim.this,
+							CroutonDemo.class);
+					finish();
+					startActivity(it);
+				}
+			}
+		}
+	};
+
 	private String ReadCID(boolean isSilent) {
-		Log.d(tag, "this.ReadCID()");
-		
+		Log.d(null, "begin to ReadCID()");
 		String t = I2CTools.ReadUID();
 		String cid = "";
 		if (t.length() == 8) {
@@ -174,18 +160,52 @@ public class CroutonFragmentConfrim extends FragmentActivity implements View.OnC
 			cid = cid + t.substring(0, 2);
 			cid = cid.toUpperCase();
 		} else if (!isSilent) {
-			//TODO 如果没有感应到标签
 			String croutonText = "没有感应到思木电子标签\n请将手持机靠近标签重试";
 			ShowCrouton(Style.ALERT, croutonText);
 		}
+		Log.d(null, "the cid has been returned !! cid.length = " + cid.length());
 		return cid;
 	}
 
+	private boolean VerifyTag() {
+		String mimaStr = "CC13250B1222";
+		byte[] passw = I2CTools.stringToBytes(mimaStr);
+		String address = "60";
+
+		byte[] buffer = new byte[16];
+		int add = Integer.valueOf(address);
+		int t;
+
+		t = I2CTools.ReadBlock(buffer, passw, (byte) 0x60, (byte) add);
+		if (t != 0) {
+			String croutonText = "警告：该标签不是思木科技认证的合法防伪标签，谨防伪造！";
+			PlayNotification();
+			// sendResult(croutonText);
+			ShowCrouton(Style.ALERT, croutonText);
+		} else {
+			String croutonText = "警告：该标签虽然加密信息吻合，但无法查找到认证数据，谨防伪造！";
+			PlayNotification();
+			// sendResult(croutonText);
+			ShowCrouton(Style.ALERT, croutonText);
+		}
+		return t == 0;
+	}
+
+	private void PlayNotification() {
+		Uri notification = RingtoneManager
+				.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		Ringtone r = RingtoneManager.getRingtone(getApplicationContext(),
+				notification);
+		r.play();
+	}
+
 	private void PutInStorage(String cid) {
-		Log.d(tag, "this.PutInStorage");
-		MyApplication myApp = (MyApplication)getApplication();
+		if (dialog.isShowing()) {
+			dialog.dismiss();
+		}
+		MyApplication myApp = (MyApplication) getApplication();
 		curPC = myApp.getCurProductCategory();
-		Log.d(tag, "this.PutInStorage().curPC = " + curPC.getFullName());
+		Log.d(null, "CrouConfirm.curPC = " + curPC.getTempSN());
 		if (VerifyTag()) {
 			Cursor c = db.rawQuery("SELECT * FROM RFID WHERE cid=?",
 					new String[] { String.valueOf(cid) });
@@ -207,7 +227,7 @@ public class CroutonFragmentConfrim extends FragmentActivity implements View.OnC
 						} else {
 							tempRFIDObjectId = rfidObjectId;
 							AlertDialog.Builder builder = new AlertDialog.Builder(
-									this);
+									CroutonFragmentConfrim.this);
 							builder.setTitle("警告")
 									.setIcon(R.drawable.ic_launcher)
 									.setCancelable(false)
@@ -232,25 +252,7 @@ public class CroutonFragmentConfrim extends FragmentActivity implements View.OnC
 			}
 		}
 	}
-	
-		
-	private boolean VerifyTag() {
-		String mimaStr = "CC13250B1222";
-		byte[] passw = I2CTools.stringToBytes(mimaStr);
-		String address = "60";
 
-		byte[] buffer = new byte[16];
-		int add = Integer.valueOf(address);
-		int t;
-
-		t = I2CTools.ReadBlock(buffer, passw, (byte) 0x60, (byte) add);
-		if (t != 0) {
-			String croutonText = "警告：该标签不是思木科技认证的合法防伪标签，谨防伪造！";
-			ShowCrouton(Style.ALERT, croutonText);
-		}
-		return t == 0;
-	}
-	
 	private void AddNModifyProduct(String rfid, ProductCategory pc,
 			Boolean isAdd) {
 		if (isAdd) {
@@ -274,41 +276,35 @@ public class CroutonFragmentConfrim extends FragmentActivity implements View.OnC
 		}
 
 		ShowCrouton(Style.INFO, "登记成功");
+		showCroutonSuccess();
 	}
-	
-	
-	private void showCrouton(String croutonText, Style croutonStyle,
-			Configuration configuration) {
-		final boolean infinite = INFINITE == croutonStyle;
 
-		if (infinite) {
-			croutonText = getString(R.string.infinity_text);
-		}
-
-		final Crouton crouton;
-		crouton = Crouton.makeText(CroutonFragmentConfrim.this, croutonText, croutonStyle);
-
-		if (infinite) {
-			infiniteCrouton = crouton;
-		}
-		crouton.setOnClickListener(this)
-				.setConfiguration(
-						infinite ? CONFIGURATION_INFINITE : configuration)
-				.show();
+	private void showCroutonSuccess() {
+		AlertDialog.Builder succ = new AlertDialog.Builder(
+				CroutonFragmentConfrim.this);
+		succ.setTitle("写入成功").setMessage(
+				"设备类别：" + getIntent().getStringExtra("first") + "-"
+						+ getIntent().getStringExtra("second") + "-"
+						+ getIntent().getStringExtra("third"));
+		succ.setNegativeButton("绑定二维码", null).setNegativeButton("取消", new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent it = new Intent(CroutonFragmentConfrim.this, CroutonDemo.class);
+				finish();
+				startActivity(it);
+			}
+		});
+		succ.create().show();
 	}
-	
+
 	private void ShowCrouton(final Style croutonStyle, String croutonText) {
 		// showCrouton(croutonText, croutonStyle, Configuration.DEFAULT);
-		ETconfirm.setText(croutonText);
+		hintEdit.setText(croutonText);
 		if (croutonStyle == Style.CONFIRM || croutonStyle == Style.INFO)
 			PlayNotification();
 	}
 
-	private void PlayNotification() {
-		Uri notification = RingtoneManager
-				.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-		Ringtone r = RingtoneManager.getRingtone(CroutonFragmentConfrim.this
-				.getApplicationContext(), notification);
-		r.play();
-	}
+
+
 }

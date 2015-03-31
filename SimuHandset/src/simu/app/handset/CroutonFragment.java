@@ -298,9 +298,9 @@ public class CroutonFragment extends Fragment implements View.OnClickListener {
 			it.setClass(getActivity().getApplicationContext(), CroutonFragmentConfrim.class);
 			startActivity(it);
 			getActivity().finish();
-			curOperType = OperType.PUTINSTORAGE;
-			timer = new Timer(true);
-			timer.schedule(task, 1000, 1500);
+//			curOperType = OperType.PUTINSTORAGE;
+//			timer = new Timer(true);
+//			timer.schedule(task, 1000, 1500);
 			break;
 		}
 		case R.id.button_verify: {

@@ -76,6 +76,7 @@ public class CroutonDemo extends SherlockFragmentActivity {
 					"the rfid item has been clicked !!", Toast.LENGTH_SHORT)
 					.show();
 			Intent intent = new Intent(this, VerifyRFID.class);
+			finish();
 			startActivity(intent);
 		} else if (item == mt2) {
 			Toast.makeText(CroutonDemo.this,
