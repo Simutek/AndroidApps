@@ -1303,7 +1303,6 @@ containing a value of this type.
         public static final int abs__textButton=0x7f0b001c;
         public static final int abs__title=0x7f0b0024;
         public static final int abs__up=0x7f0b0001;
-        public static final int add=0x7f0b0064;
         public static final int alternate_view_group=0x7f0b0049;
         public static final int attributions=0x7f0b0018;
         public static final int bottom=0x7f0b0009;
@@ -1337,6 +1336,9 @@ containing a value of this type.
         public static final int listMode=0x7f0b000c;
         public static final int loginbtn=0x7f0b0058;
         public static final int lvGroup=0x7f0b0052;
+        public static final int main_add=0x7f0b0065;
+        public static final int main_sub_menu_rfid=0x7f0b0066;
+        public static final int main_sub_menu_scan=0x7f0b0067;
         public static final int none=0x7f0b0006;
         public static final int normal=0x7f0b000d;
         public static final int password=0x7f0b0057;
@@ -1348,8 +1350,6 @@ containing a value of this type.
         public static final int showHome=0x7f0b0012;
         public static final int showTitle=0x7f0b0013;
         public static final int speed=0x7f0b005c;
-        public static final int sub_menu_rfid=0x7f0b0065;
-        public static final int sub_menu_scan=0x7f0b0066;
         public static final int tabMode=0x7f0b000e;
         public static final int test_layout=0x7f0b005e;
         public static final int text=0x7f0b005f;
@@ -1366,6 +1366,8 @@ containing a value of this type.
         public static final int units=0x7f0b005d;
         public static final int useLogo=0x7f0b0014;
         public static final int username=0x7f0b0055;
+        public static final int verify_back=0x7f0b0068;
+        public static final int verifyagain=0x7f0b0064;
         public static final int wrap_content=0x7f0b000b;
     }
     public static final class integer {
@@ -1423,6 +1425,7 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int main_activity=0x7f0e0000;
+        public static final int verify_menu=0x7f0e0001;
     }
     public static final class string {
         public static final int about=0x7f0c001b;

@@ -51,26 +51,16 @@ public class CroutonDemo extends SherlockFragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		getSupportMenuInflater().inflate(R.menu.main_activity, menu);
-		mt1 = menu.findItem(R.id.sub_menu_rfid);
-		mt2 = menu.findItem(R.id.sub_menu_scan);
+		mt1 = menu.findItem(R.id.main_sub_menu_rfid);
+		mt2 = menu.findItem(R.id.main_sub_menu_scan);
 
-		final MenuItem plus = (MenuItem) menu.findItem(R.id.add);
-		plus.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				Toast.makeText(CroutonDemo.this,
-						"Menu Item has been clicked !!", Toast.LENGTH_SHORT)
-						.show();
-				return false;
-			}
-		});
+		final MenuItem plus = (MenuItem) menu.findItem(R.id.main_add);
+		
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stubs
 		if (item == mt1) {
 			Toast.makeText(CroutonDemo.this,
 					"the rfid item has been clicked !!", Toast.LENGTH_SHORT)
@@ -90,6 +80,8 @@ public class CroutonDemo extends SherlockFragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	
+	
 	enum PageInfo {
 
 		Crouton(R.string.crouton), Exstorage(R.string.exstorage), Search(
