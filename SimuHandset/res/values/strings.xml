@@ -19,14 +19,16 @@
 <resources>
 
   <string name="app_name">思木溯源</string>
-  <string name="button_putinstorage">入库</string>
+  <string name="button_putinstorage">确认入库</string>
   <string name="hint_duration">Display duration in milliseconds.</string>
-  <string name="hint_text">或直接输入产品类别ID</string>
+  <string name="hint_text">暂无</string>
   <string name="text_demo">This is a demo text, enter text below to display.</string>
   <string name="warning_duration">You\'ll need to set the duration!</string>
   <string name="display_on_top">Display on top</string>
   <string name="crouton">入库</string>
   <string name="exstorage">出库</string>
+  <string name="search">查询</string>
+  <string name="setting">设置</string>
   <string name="verify">验证</string>
   <string name="upload">上传</string>
   <string name="download">下载</string>
@@ -45,4 +47,14 @@
   <string name="button_verify">验证标签</string>
   <string name="button_exstorage">出库</string>
   <string name="button_generateid">快捷生成类别ID</string>
+  
+  
+  <style name="dialog" parent="@android:style/Theme.Dialog">  
+        <item name="android:windowFrame">@null</item><!--边框-->  
+        <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->  
+        <item name="android:windowIsTranslucent">false</item><!--半透明-->  
+        <item name="android:windowNoTitle">true</item><!--无标题-->  
+       <!-- <item name="android:windowBackground">@color/alpha_bg</item>背景透明-->  
+        <item name="android:backgroundDimEnabled">false</item><!--模糊-->  
+    </style>  
 </resources>

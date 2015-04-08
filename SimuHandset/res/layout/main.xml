@@ -13,24 +13,37 @@
   ~ distributed under the License is distributed on an "AS IS" BASIS,
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
+  ~ limitations under the License.-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
-
-  <com.viewpagerindicator.TitlePageIndicator
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:id="@+id/titles"
-    app:footerIndicatorStyle="triangle"
-    android:background="@color/abs__background_holo_dark"/>
+    android:orientation="vertical" >
 
-  <android.support.v4.view.ViewPager
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/crouton_pager" />
+<!--     <include layout="@layout/general_layout_title"/>
+ -->    
+    <android.support.v4.view.ViewPager
+        android:id="@+id/crouton_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!--
+       <com.viewpagerindicator.TitlePageIndicator
+      android:id="@+id/titles"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/abs__background_holo_dark"
+      app:footerIndicatorStyle="triangle" />
+    -->
+
+    <com.viewpagerindicator.TabPageIndicator
+        android:id="@+id/titles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.TabPageIndicator"
+        app:footerIndicatorStyle="underline"
+         />
 
 </LinearLayout>

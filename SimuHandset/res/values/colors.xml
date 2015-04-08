@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="NORMAL_BACKGROUND_COLOR">#fff2edee</color>
+    <color name="NORMAL_TEXT_COLOR">#ff636363</color>
+    <color name="SPLITTER_COLOR">#ffd7d7d7</color>
+    <color name="BUTTON_COLOR">#FFA500</color>
+</resources>

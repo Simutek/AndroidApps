@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/main_add"
+        android:icon="@android:drawable/ic_input_add"
+        android:showAsAction="always"
+        android:title="">
+        <menu>
+            <item
+                android:id="@+id/main_sub_menu_rfid"
+                android:icon="@drawable/rfid_verify"
+                android:showAsAction="ifRoom|withText"
+                android:title="RFID验证"/>
+            <item
+                android:id="@+id/main_sub_menu_scan"
+                android:icon="@drawable/scan"
+                android:showAsAction="never"
+                android:title="扫描二维码"/>
+        </menu>
+    </item>
+
+</menu>

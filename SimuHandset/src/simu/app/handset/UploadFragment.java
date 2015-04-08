@@ -67,6 +67,9 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 	public AVObject TempRfidObj = null;
 	public  AVObject TempProCgy = null;
 	public Date date;
+	
+	private String TempCategoryName = null;
+	private Number TempcParentNo = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -117,13 +120,14 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 	}
 
 	private void UpLoad() {
-		
+		Log.d(tag, "调用了Upload方法");
 		newThread = new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				AVQuery<AVObject> QueryForVendor = new AVQuery<AVObject>("Vendor");
+				AVQuery<AVObject> QueryForVendor = new AVQuery<AVObject>(
+						"Vendor");
 				QueryForVendor.whereEqualTo("vendorName", "四川中兴机械制造有限公司");
 				try {
 					List<AVObject> TempVendors = QueryForVendor.find();
@@ -132,15 +136,15 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-				
-				Cursor c = db.rawQuery("select * from smallTags where " +
-						"ProductType is not '' and ProductType is not null", null);
-				
+
+				Cursor c = db.rawQuery("select * from smallTags where "
+						+ "ProductType is not '' and ProductType is not null",
+						null);
+				Log.d(tag, "smallTags表中 ProductType 不为空的记录有 " + c.getCount() + "条");
 				while (c.moveToNext()) {
-					
+
 					String spd = c.getString(c.getColumnIndex("ProductionDate"));
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 					try {
 						date = format.parse(spd);
 					} catch (ParseException e1) {
@@ -148,35 +152,65 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 						e1.printStackTrace();
 					}
 					String sCID = c.getString(c.getColumnIndex("CID"));
-					String sProductType = c.getString(c.getColumnIndex("ProductType"));
+					String sProductType = c.getString(c
+							.getColumnIndex("ProductType"));
 					Log.d(tag, "smallTags表的的ProductType为:" + sProductType);
-					
-					AVQuery<AVObject> QueryForRfid = new AVQuery<AVObject>("RFID");
+
+					AVQuery<AVObject> QueryForRfid = new AVQuery<AVObject>(
+							"RFID");
 					QueryForRfid.whereEqualTo("cid", sCID);
 					try {
 						List<AVObject> TempRfidObjs = QueryForRfid.find();
 						TempRfidObj = TempRfidObjs.get(0);
-						AVQuery<AVObject> QueryForProduct = new AVQuery<AVObject>("Product");
+						AVQuery<AVObject> QueryForProduct = new AVQuery<AVObject>(
+								"Product");
 						QueryForProduct.whereEqualTo("rfid", TempRfidObj);
 						List<AVObject> TempProObjs = QueryForProduct.find();
 						if (TempProObjs.size() >= 1) {
 							Log.d(tag, "Product表中有对应的记录");
-						}else {
+						} else {
 							Log.d(tag, "Product表中木有对应的记录");
-							AVQuery<AVObject> QueryForProCgy = new AVQuery<AVObject>("ProductCategory");
+							AVQuery<AVObject> QueryForProCgy = new AVQuery<AVObject>(
+									"ProductCategory");
 							QueryForProCgy.whereEqualTo("tempSN", sProductType);
 							List<AVObject> TempProCgys = QueryForProCgy.find();
 							if (TempProCgys.size() >= 1) {
 								TempProCgy = TempProCgys.get(0);
+								// 获取 categoryName (FullName)
+								TempCategoryName = TempProCgy
+										.getString("categoryName");
+								TempcParentNo = TempProCgy
+										.getNumber("cParentNo");
+								if (TempcParentNo != null) {
+									AVQuery<ProductCategory> query2 = AVObject
+											.getQuery(ProductCategory.class);
+									query2.whereEqualTo("cNo", TempcParentNo);
+									AVObject obj1 = query2.getFirst();
+									TempCategoryName = obj1
+											.getString("categoryName")
+											+ "-"
+											+ TempCategoryName;
+									TempcParentNo = obj1.getNumber("cParentNo");
+									if (TempcParentNo != null) {
+										AVQuery<ProductCategory> query3 = AVObject
+												.getQuery(ProductCategory.class);
+										query3.whereEqualTo("cNo",
+												TempcParentNo);
+										AVObject obj2 = query3.getFirst();
+										TempCategoryName = obj2
+												.getString("categoryName")
+												+ "-" + TempCategoryName;
+									}
+								}
 							}
-							
-							
+
 							AVObject NewObject = new AVObject("TestToSaveObj");
 							NewObject.put("statu", 1);
 							NewObject.put("rfid", TempRfidObj);
 							NewObject.put("vendor", TempVendroObj);
 							NewObject.put("category", TempProCgy);
 							NewObject.put("ProductDate", date);
+							NewObject.put("categoryName", TempCategoryName);
 							NewObject.save();
 							Log.d(tag, "构造数据保存完毕");
 						}
@@ -185,80 +219,13 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 						e.printStackTrace();
 					}
 				}
-				
-				
+
 				c.close();
-//				db.close();
+				// db.close();
 			}
 		});
 		newThread.start();
 		
-		
-		
-//		// TODO Auto-generated method stub
-//		Cursor c = db.rawQuery("select * from smallTags where " +
-//				"ProductType is not '' and ProductType is not null", null);
-//		Log.d(tag, "在smallTags表中查询到的ProductType不为空的记录有: " + c.getCount() + "条");
-//		
-//		while (c.moveToNext()) {
-//			String sCID = c.getString(c.getColumnIndex("CID"));
-//			String sProductType = c.getString(c.getColumnIndex("ProductType"));
-//			
-//			Log.d(tag, "在smallTags中查询出的CID为:" + sCID);
-//			
-//			AVQuery<AVObject> QueryForRfid = new AVQuery<AVObject>("RFID");
-//			QueryForRfid.whereEqualTo("cid", sCID);
-//			QueryForRfid.findInBackground(new FindCallback<AVObject>() {
-//				
-//				@Override
-//				public void done(List<AVObject> arg0, AVException arg1) {
-//					// TODO Auto-generated method stub
-//					if (null == arg1) {
-//						TempRfidObj = (AVObject)arg0.get(0);
-//						String Rfidcid = TempRfidObj.getString("cid");
-//						String RfidObjectid = TempRfidObj.getString("objectId");
-//						Log.d(tag, "LeanCloud中的RFID对应的objectid和cid分别为:" + 
-//								RfidObjectid +" " + Rfidcid);
-//						AVQuery<AVObject> QueryForProduct = new AVQuery<AVObject>("Product");
-//						QueryForProduct.whereEqualTo("rfid", TempRfidObj);
-//						QueryForProduct.findInBackground(new FindCallback<AVObject>() {
-//							
-//							@Override
-//							public void done(List<AVObject> arg0, AVException arg1) {
-//								// TODO Auto-generated method stub
-//								if (arg0.size() >= 1) {
-//									Log.d(tag, "Product表中存在对应的rfid对象");
-//								}else{
-//									AVQuery<AVObject> QueryForProCgy = new AVQuery<AVObject>("ProductCategory");
-//									QueryForProCgy.whereEqualTo("tempSN", "sProductType");
-//									QueryForProCgy.findInBackground(new FindCallback<AVObject>() {
-//										
-//										@Override
-//										public void done(List<AVObject> arg0, AVException arg1) {
-//											// TODO Auto-generated method stub
-//											AVObject TempProCgy = (AVObject)arg0.get(0);
-//											
-//											AVObject NewObject = new AVObject("TestToSaveObj");
-//											NewObject.put("statu", 1);
-//											NewObject.put("rfid", TempRfidObj);
-//											NewObject.put("vendor", TempVendroObj);
-//											NewObject.put("category", TempProCgy);
-//											NewObject.saveInBackground();
-//											
-//										}
-//									});
-//									
-//								}
-//							}
-//						});
-//					}else {
-//						Log.d(tag, "在LeanCloud中的RFID没有查询到对应的记录");
-//					}
-//				}
-//			});			
-//		c.close();
-//		db.close();
-//	}
 	}
 	
 	private void DownloadVendor(){
@@ -309,6 +276,7 @@ public class UploadFragment extends Fragment implements View.OnClickListener {
 							values.put("parent", parentObjectId);
 							values.put("tagGeneration", pc.getTagGeneration());
 							values.put("tempSN", pc.getTempSN());
+							values.put("fullName", pc.getFullName());//增加FullName的下载
 							db.insert("ProductCategory", null, values);
 						}
 					} catch(Exception se){
